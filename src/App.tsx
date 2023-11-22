@@ -6,19 +6,16 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 
 import store from './store';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 library.add(fab);
 
 function App() {
     return (
-        <React.StrictMode>
+  
             <Provider store={store}>
                 <Main />
-                <ToastContainer />
             </Provider>
-        </React.StrictMode>
+
     );
 }
 

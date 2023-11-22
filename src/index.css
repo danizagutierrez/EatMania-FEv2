@@ -547,7 +547,6 @@ a:focus {
     -ms-flex-align: center;
     align-items: center;
     margin-top: 45px;
-    height: calc(100% - 45px);
     border-radius: 5px;
     padding: 20px 15px;
     background-color: #222831;
@@ -984,7 +983,6 @@ section.sign .tab .tab-content .row {
 .client_section .box .img-box img {
     border-radius: 100%;
     border: 5px solid #ffbe33;
-    width: 115px;
     position: relative;
 }
 
@@ -1030,8 +1028,8 @@ section.sign .tab .tab-content .row {
     padding: 0 15px;
 }
 
-.client_section .owl-carousel .carousel .carousel-control-prev,
-.client_section .owl-carousel .carousel .carousel-control-next {
+.client_section .owl-carousel .owl-nav .owl-prev,
+.client_section .owl-carousel .owl-nav .owl-next {
     width: 45px;
     height: 45px;
     background-color: #ffbe33;
@@ -1041,15 +1039,8 @@ section.sign .tab .tab-content .row {
     font-size: 24px;
     margin: 0 5px;
     border-radius: 100%;
-    bottom: 0;
-    top: auto;
 }
-.client_section .owl-carousel .carousel .carousel-control-prev {
-    left: 45%;
-}
-.client_section .owl-carousel .carousel .carousel-control-next {
-    right: 45%;
-}
+
 /* client section end */
 .contact_section .heading_container {
     margin-bottom: 45px;
@@ -1537,18 +1528,16 @@ body {
     background-color: #fff;
     padding: 0 5px;
 }
-
-.view_more {
-    display: inline-block;
-    padding: 10px 55px;
-    background-color: #ffbe33;
-    color: #ffffff;
-    border-radius: 45px;
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-    border: none;
+#aboutUsHeader{
+    margin-top: 0;
+    margin-bottom: 1rem;
+    width: 100%;
+    margin-left: 75%;
 }
-
-.view_more:hover {
-    background-color: #e69c00;
+.aboutUsHeader_section {
+    width: 100%;
+    background-color: #222831;
+    color: #ffffff;
+    padding: 79px 40px 40px 339px;
+    text-align: center;
 }

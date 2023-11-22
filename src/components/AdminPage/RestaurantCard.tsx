@@ -1,22 +1,18 @@
-import { Row, Col, Image, Button } from 'react-bootstrap';
+import { Row, Col, Image } from 'react-bootstrap';
 import { IRestaurant } from '../../store/slices/restaurants';
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface IRestaurantCardProps {
     r: IRestaurant;
     handleCheckboxChange: (checked: boolean, id: string) => void;
-    editRestaurant: (id?: number) => void;
 }
 
-const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange, editRestaurant }) => {
-    const navigate = useNavigate();
-
+const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange }) => {
     return (
-        <div className="restaurant-card">
+        <div key={r.restaurantId} className="restaurant-card">
             <input
                 type="checkbox"
-                value={r.restaurant_id}
+                value={r.restaurantId}
                 onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)}
             />
             <div className="borderWithText" data-text={r.name}>
@@ -35,32 +31,20 @@ const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange, edi
                             <b>Name:</b> {r.name}
                         </span>
                         <span>
-                            <b>Cuisine Type:</b> {r.cuisine_type}
+                            <b>Phone Number:</b> {r.phoneNumber}
                         </span>
                         <span>
-                            <b>Phone Number:</b> {r.phone_number}
+                            <b>Cuisine Type:</b> {r.cuisineType}
+                        </span>
+                        <span>
+                            <b>Rating:</b> {r.rating}
                         </span>
                         <span>
                             <b>Description:</b> {r.description}
                         </span>
                         <span>
-                            <b>Rating:</b> {r.rating}
-                        </span>
-                        <span className="d-flex justify-content-between">
-                            <Button
-                                onClick={() => {
-                                    editRestaurant(r.restaurant_id);
-                                }}
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                onClick={() => {
-                                    navigate('/restaurant/' + r.restaurant_id);
-                                }}
-                            >
-                                Manage Menu
-                            </Button>
+                            {/* <a href='r.website'>Website</a> */}
+                            <b>Website:</b> {r.website}
                         </span>
                     </Col>
                 </Row>

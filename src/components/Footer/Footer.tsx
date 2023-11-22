@@ -11,7 +11,7 @@ const Footer = () => {
                             <div className="contact_link_box">
                                 <a href="">
                                     <i className="fa fa-map-marker" aria-hidden="true"></i>
-                                    <span>Location</span>
+                                    <span>Vancouver</span>
                                 </a>
                                 <a href="">
                                     <i className="fa fa-phone" aria-hidden="true"></i>
@@ -19,7 +19,7 @@ const Footer = () => {
                                 </a>
                                 <a href="">
                                     <i className="fa fa-envelope" aria-hidden="true"></i>
-                                    <span>demo@gmail.com</span>
+                                    <span>Eatmania@gmail.com</span>
                                 </a>
                             </div>
                         </div>
@@ -30,23 +30,23 @@ const Footer = () => {
                                 Eat Mania
                             </a>
                             <p>
-                                Necessary, making this the first true generator on the Internet. It
-                                uses a dictionary of over 200 Latin words, combined with
+                            Welcome to Eatmania, where every bite counts! Our platform is your go-to destination for culinary exploration. 
+                            Whether you're seeking the perfect restaurant, comparing kitchen gadgets, or exploring diverse cuisines, Eatmania is here to guide your taste journey. Discover, compare, and savor the best of the culinary world with us
                             </p>
                             <div className="footer_social">
-                                <a href="">
+                                <a href="https://www.facebook.com">
                                     <FontAwesomeIcon icon={['fab', 'facebook']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.twitter.com">
                                     <FontAwesomeIcon icon={['fab', 'twitter']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.linkedin.com">
                                     <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.instragram.com">
                                     <FontAwesomeIcon icon={['fab', 'instagram']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.pinterest.com">
                                     <FontAwesomeIcon icon={['fab', 'pinterest']} />
                                 </a>
                             </div>

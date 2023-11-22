@@ -1,17 +1,14 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { api } from '../../api/index'
 // import type { RootState } from '../store';
 
 export type FoodItem = {
-    foodId: number;
-    adminID?: number;
+    id: number;
     foodName: string;
-    foodPrice: string;
+    foodPrice: number;
+    rating: number;
     description: string;
-    image?: string;
-    reviews?: number;
-    restaurant?: any;
-    spice?: string;
+    image: string;
 };
 
 interface FoodState {
@@ -20,19 +17,9 @@ interface FoodState {
 }
 
 const initialState: FoodState = {
-    foods: [],
+    foods:[],
     searchKey: ''
 };
-
-export const fetchFoods = createAsyncThunk('food/fetchFoods', async () => {
-    try {
-        const response = await axios.get(process.env.REACT_APP_API_URL + '/api/GetAllFoods');
-        return response.data;
-    } catch (error) {
-        console.log('API Error: ', error);
-        throw error;
-    }
-});
 
 export const foodSlicer = createSlice({
     name: 'food',
@@ -41,41 +28,28 @@ export const foodSlicer = createSlice({
         setSearchKey: (state, action: PayloadAction<string>) => {
             state.searchKey = action.payload;
         },
-        deleteFoods: (state, action: PayloadAction<number[]>) => {
-            for (let i = 0; i < action.payload.length; i++) {
-                const index = state.foods.findIndex((r) => r.foodId === action.payload[i]);
-                if (index !== -1) {
-                    state.foods.splice(index, 1);
-                }
-            }
-        },
-        addFood: (state, action: PayloadAction<any>) => {
-            state.foods.push({
-                ...action.payload,
-                image: '/images/f1.png'
-            });
-        },
-        updateFood: (state, action: PayloadAction<FoodItem>) => {
-            const index = state.foods.findIndex((r) => r.foodId === action.payload.foodId);
-            if (index !== -1) {
-                state.foods[index] = {
-                    ...action.payload,
-                    foodId: state.foods[index].foodId,
-                    image: '/images/f1.png'
-                };
-            }
+        foodSuccess: (state, action: PayloadAction<FoodItem[]>) =>{
+            state.foods = action.payload
         }
-    },
-    extraReducers: (builder) => {
-        builder.addCase(fetchFoods.fulfilled, (state, action) => {
-            state.foods = action.payload;
-        });
     }
 });
 
-export const { setSearchKey, deleteFoods, addFood, updateFood } = foodSlicer.actions;
+export const { setSearchKey } = foodSlicer.actions;
 
 export default foodSlicer.reducer;
+
+// Actions
+const { foodSuccess } = foodSlicer.actions
+
+ export const fetchFood = () => async (dispatch: (arg0: { payload: FoodItem[]; type: "food/foodSuccess"; }) => any) => {
+    try {
+        await api.get('/GetAllFoods')
+            .then((response) => dispatch(foodSuccess(response.data)))
+    }
+    catch (error : any) {
+        return console.error(error?.message);
+    }
+}
 
 // export const foods = (state: RootState) => state.food.foods;
 // export const searchKey = (state: RootState) => state.food.searchKey;

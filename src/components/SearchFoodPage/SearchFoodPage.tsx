@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal, Row, Col, Container, Form } from 'react-bootstrap';
-import * as formik from 'formik';
-import * as yup from 'yup';
-import axios from 'axios';
-import { setSearchKey } from '../../store/slices/food';
+import { Button } from 'react-bootstrap';
+// import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import { fetchFood, setSearchKey } from '../../store/slices/food';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -12,53 +14,89 @@ import type { FoodItem } from '../../store/slices/food';
 import { RootState } from '../../store/store';
 import { ReactComponent as NoDataSvg } from '../../assets/icons/NoData.svg';
 import PaginationEle from '../../shared/Pagination';
-import { Rating } from 'react-simple-star-rating';
-import { toast } from 'react-toastify';
 
 interface Filters {
-    price: boolean;
-    reviews: boolean;
-    spice: boolean;
+    pricelow: boolean;
+    priceHigh: boolean;
+    Ratings: boolean;
 }
 
 const SearchFoodPage = () => {
-    const foods = useAppSelector((state: RootState) => state.food.foods);
-    const user = useAppSelector((state: RootState) => state.auth.user);
-    const searchKey = useAppSelector((state: RootState) => state.food.searchKey);
     const dispatch = useAppDispatch();
+    // const navigate = useNavigate();
+    const foods = useAppSelector((state: RootState) => state.food.foods);
+    const searchKey = useAppSelector((state: RootState) => state.food.searchKey);
+    
 
     const [foodList, setFoodList] = useState<FoodItem[]>([]);
     const [pageActive, setPageActive] = useState<number>(1);
-    const [show, setShow] = useState(false);
-    const [editing, setEditing] = useState<number | null>(null);
-    const [rating, setRating] = useState(0);
+
     const [searchKeyWord, setSearchKeyWord] = useState<string>('');
-
-    const handleClose = () => setShow(false);
-    const handleShow = (value: number) => {
-        setEditing(value);
-        setShow(true);
-    };
-    const handleRating = (rate: number) => {
-        setRating(rate);
-    };
-
     const [filter, setFilter] = useState<Filters>({
-        price: false,
-        reviews: false,
-        spice: false
+        pricelow: false,
+        priceHigh: false,
+        Ratings: false
     });
+
+    useEffect(() => {
+        dispatch(fetchFood())
+    }, [dispatch]);
+
+
+    function orderFoodsByPriceAsc(food2: FoodItem[], ascending: boolean = true): FoodItem[] {
+        // Use the sort method with a compare function
+        food2.sort((a, b) => {
+            if (ascending) {
+            return a.foodPrice - b.foodPrice;
+          } else {
+            return b.foodPrice - a.foodPrice;
+          }
+        });
+      
+        // Return the sorted array
+        return food2;
+      }
+
+    function orderFoodsByPriceDesc(food2: FoodItem[], descending: boolean = true): FoodItem[] {
+        // Use the sort method with a compare function
+        food2.sort((a, b) => {
+          if (descending) {
+            return b.foodPrice - a.foodPrice;
+          } else {
+            return a.foodPrice - b.foodPrice;
+          }
+        });
+      
+        // Return the sorted array
+        return food2;
+      }
+
+      function orderFoodsByRating(food2: FoodItem[], descending: boolean = true): FoodItem[] {
+        // Use the sort method with a compare function
+        food2.sort((a, b) => {
+          if (descending) {
+            return b.rating - a.rating;
+          } else {
+            return a.rating - b.rating;
+          }
+        });
+        // Return the sorted array
+        return food2;
+      }
 
     const searchFood = () => {
         const newFoodList = foods.filter((food: FoodItem) => {
             let flag = false;
-            if (filter.price) {
-                flag = food.foodPrice.toLowerCase().includes(searchKeyWord.toLowerCase());
+            if (filter.pricelow) {
+                // flag = food.foodPrice.toLowerCase().includes(searchKeyWord.toLowerCase());
+                flag = food.foodPrice.toString().toLowerCase().includes(searchKeyWord.toLowerCase());
+
             }
             // if (!flag && filter.reviews) {
-            //     flag = food.reviews.toLowerCase().includes(searchKeyWord.toLowerCase());
+            //     flag = food.rating 
+            //     //.includes(searchKeyWord.toLowerCase());
             // }
-            // if (!flag && filter.spice) {
+            // if (!flag && filter.Ratings) {
             //     flag = food.spice.toLowerCase().includes(searchKeyWord.toLowerCase());
             // }
             if (!flag) {
@@ -68,6 +106,27 @@ const SearchFoodPage = () => {
         });
         setFoodList(newFoodList);
     };
+
+    const filterFood = () => {
+    
+            setFoodList(foodList);
+            let newFoodList:FoodItem[] = [];
+            if (filter.pricelow) {
+                
+                newFoodList = orderFoodsByPriceAsc([...foodList], true)
+            }
+            else{
+                newFoodList = foodList;
+            }
+            if(filter.priceHigh){
+                newFoodList = orderFoodsByPriceDesc([...foodList], true)
+            }
+            else if(filter.Ratings){
+                newFoodList = orderFoodsByRating([...foodList], true)
+            }
+        setFoodList(newFoodList);
+    };
+
 
     const handleSearch = () => {
         if (searchKeyWord) {
@@ -102,39 +161,9 @@ const SearchFoodPage = () => {
             setFoodList(foods);
         }
     }, [filter]);
-
-    const { Formik } = formik;
-    const schema = yup.object().shape({
-        rating: yup.number(),
-        review_content: yup.string().required('Please descripbe your review')
-    });
-
-    const handleSubmitCustomer = (values: any) => {
-        axios
-            .post(
-                process.env.REACT_APP_API_URL +
-                    '/api/' +
-                    user.user_id +
-                    '/fooditem/' +
-                    editing +
-                    '/review',
-                {
-                    review_content: values.review_content,
-                    rating: rating
-                }
-            )
-            .then((res) => {
-                setShow(false);
-                setEditing(null);
-                console.log(res.data.food);
-                toast.success('Your review has been submitted. Thank you for your contribution.', {
-                    position: toast.POSITION.BOTTOM_RIGHT
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+    useEffect(() => {
+        filterFood();
+    }, [filter]);
 
     return (
         <div>
@@ -158,31 +187,31 @@ const SearchFoodPage = () => {
             <Container>
                 <Row>
                     <Col md={12} lg={2} className="filter-class">
-                        <div>Filters</div>
+                        <div>Sort by</div>
                         <Form.Group>
                             <Form.Check
-                                label="Price"
-                                checked={filter.price}
+                                label="Price(Lower to Higher)"
+                                checked={filter.pricelow}
                                 onChange={(e) => {
-                                    setFilter({ ...filter, price: e.target.checked });
+                                    setFilter({ ...filter, pricelow: e.target.checked });
                                 }}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Check
-                                label="Reviews"
-                                checked={filter.reviews}
+                                label="Price(Higher to Lower)"
+                                checked={filter.priceHigh}
                                 onChange={(e) => {
-                                    setFilter({ ...filter, reviews: e.target.checked });
+                                    setFilter({ ...filter, priceHigh: e.target.checked });
                                 }}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Check
-                                label="Spice"
-                                checked={filter.spice}
+                                label="Rating(Higher to lower)"
+                                checked={filter.Ratings}
                                 onChange={(e) => {
-                                    setFilter({ ...filter, spice: e.target.checked });
+                                    setFilter({ ...filter, Ratings: e.target.checked });
                                 }}
                             />
                         </Form.Group>
@@ -206,10 +235,7 @@ const SearchFoodPage = () => {
                                                 .slice((pageActive - 1) * 4, pageActive * 4)
                                                 .map((food, i) => (
                                                     <Col sm={12} md={6} key={i}>
-                                                        <FoodCard
-                                                            addReview={handleShow}
-                                                            food={food}
-                                                        />
+                                                        <FoodCard food={food} />
                                                     </Col>
                                                 ))}
 
@@ -228,83 +254,6 @@ const SearchFoodPage = () => {
                     </Col>
                 </Row>
             </Container>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        Leave a review for{' '}
-                        {foods.filter((f) => f.foodId === editing)[0]?.foodName || ''}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Container>
-                        <Row>
-                            <Col md={12}>
-                                <Formik
-                                    validationSchema={schema}
-                                    onSubmit={(values) => {
-                                        handleSubmitCustomer(values);
-                                    }}
-                                    initialValues={{
-                                        rating: 0,
-                                        review_content: ''
-                                    }}
-                                >
-                                    {({ handleSubmit, handleChange, values, touched, errors }) => (
-                                        <Form noValidate onSubmit={handleSubmit}>
-                                            <Row className="mb-3">
-                                                <Form.Group
-                                                    as={Row}
-                                                    md="12"
-                                                    controlId="validationFormik06"
-                                                >
-                                                    <Form.Label column sm="4">
-                                                        Rate
-                                                    </Form.Label>
-                                                    <Col sm="8">
-                                                        <Rating onClick={handleRating} />
-                                                    </Col>
-                                                </Form.Group>
-                                            </Row>
-                                            <Row className="mb-3">
-                                                <Form.Group
-                                                    as={Col}
-                                                    md="12"
-                                                    controlId="validationFormik05"
-                                                >
-                                                    <Form.Label>Description</Form.Label>
-                                                    <Form.Control
-                                                        as="textarea"
-                                                        rows={3}
-                                                        placeholder=""
-                                                        name="review_content"
-                                                        value={values.review_content}
-                                                        onChange={handleChange}
-                                                        isInvalid={
-                                                            touched.review_content &&
-                                                            !!errors.review_content
-                                                        }
-                                                    />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        {errors.review_content}
-                                                    </Form.Control.Feedback>
-                                                </Form.Group>
-                                            </Row>
-                                            <div className="float-center gap-2">
-                                                <Button type="submit">Submit</Button>
-                                                <Button variant="secondary" onClick={handleClose}>
-                                                    Close
-                                                </Button>
-                                            </div>
-                                        </Form>
-                                    )}
-                                </Formik>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Modal.Body>
-            </Modal>
-
             <Footer />
         </div>
     );

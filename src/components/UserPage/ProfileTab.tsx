@@ -22,8 +22,7 @@ const ProfileTab = () => {
     });
     const { Formik } = formik;
     const schema = yup.object().shape({
-        lastname: yup.string().required('Please Enter Your Last Name'),
-        firstname: yup.string().required('Please Enter Your First Name'),
+        name: yup.string().required('Please Enter Your Name'),
         email: yup.string().email('Enter proper email').required('Please Enter Your Email'),
         birthday: yup.string().required('Please Select Your Birthday')
     });
@@ -45,7 +44,7 @@ const ProfileTab = () => {
     }, [authSuccess]);
     return (
         <>
-            <h1 className="mb-5">Hi! {user.user_firstname + ' ' + user.user_lastname}</h1>
+            <h1 className="mb-5">Hi! {user.name}</h1>
             <Container>
                 <Row>
                     <Col md={12} lg={6}>
@@ -67,9 +66,8 @@ const ProfileTab = () => {
                                 upateUser(values);
                             }}
                             initialValues={{
-                                firstname: user.user_firstname,
-                                lastname: user.user_lastname,
-                                email: user.user_email,
+                                name: user.name,
+                                email: user.email,
                                 birthday: '1979-03-23'
                             }}
                         >
@@ -78,49 +76,22 @@ const ProfileTab = () => {
                                     <Row className="mb-3">
                                         <Form.Group as={Row} md="12" controlId="validationFormik01">
                                             <Form.Label column sm="4">
-                                                First Name
+                                                Name
                                             </Form.Label>
                                             <Col sm="8">
                                                 <Form.Control
                                                     type="text"
-                                                    placeholder="First Name"
-                                                    name="firstname"
-                                                    value={values.firstname}
+                                                    placeholder="Name"
+                                                    name="name"
+                                                    value={values.name}
                                                     disabled={!isEditable}
                                                     onChange={handleChange}
                                                     isInvalid={
-                                                        touched.firstname && errors.firstname
-                                                            ? true
-                                                            : false
+                                                        touched.name && errors.name ? true : false
                                                     }
                                                 />
                                                 <Form.Control.Feedback type="invalid">
-                                                    {errors.firstname}
-                                                </Form.Control.Feedback>
-                                            </Col>
-                                        </Form.Group>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Row} md="12" controlId="validationFormik04">
-                                            <Form.Label column sm="4">
-                                                Last Name
-                                            </Form.Label>
-                                            <Col sm="8">
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder="Last Name"
-                                                    name="lastname"
-                                                    value={values.lastname}
-                                                    disabled={!isEditable}
-                                                    onChange={handleChange}
-                                                    isInvalid={
-                                                        touched.lastname && errors.lastname
-                                                            ? true
-                                                            : false
-                                                    }
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {errors.lastname}
+                                                    {errors.name}
                                                 </Form.Control.Feedback>
                                             </Col>
                                         </Form.Group>

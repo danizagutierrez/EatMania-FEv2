@@ -113,7 +113,7 @@ const Header: FC<HeaderProps> = ({ query }) => {
                                             src="/images/client1.jpg"
                                             alt="Not found iamge"
                                         />
-                                        {user.user_firstname} {user.user_lastname}
+                                        {user.name}
                                     </span>
                                     <Dropdown.Toggle split className="userLink" />
                                     <Dropdown.Menu>

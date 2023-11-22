@@ -19,13 +19,15 @@ import {
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { RootState } from '../../store/store';
 import { Alert } from 'react-bootstrap';
+import apiService from '../../services/axios/apiService';
 
 const SignIn = () => {
     const navigate = useNavigate();
+    const [isSign, setIsSign] = useState(true);
     const propErrors = useAppSelector((state: RootState) => state.auth.errors);
     const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
     const dispatch = useAppDispatch();
-
+    
     const { Formik } = formik;
     const schema = yup.object().shape({
         email: yup.string().email('Enter proper email').required('Please Enter Your Email'),
@@ -35,14 +37,42 @@ const SignIn = () => {
             .required('Please Enter Your Password')
     });
 
+    useEffect(() => {
+        if (isAuthenticated) {
+          navigate('/');
+        }
+      }, [isAuthenticated, navigate]);
+
+
     const signinUser = (values: any) => {
-        dispatch(loginUser(values));
+        const body = {
+            email: values.email,
+            password: values.password
+        };
+
+        // Make a registration API call using apiService.dataService
+        apiService.dataService(body, 'LOGIN').then((data: any) => {
+            if (data?.status == 200) {
+
+                dispatch(loginUser(data));
+                navigate('/user');
+            } else {
+                // Handle unsuccessful login
+                setIsSign(false);
+                console.error('Login failed:', data?.status);
+               
+                // Example: Show an error message to the user
+                
+                dispatch(clearErrors());
+            }
+        });
     };
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/');
         }
     }, [isAuthenticated]);
+
     return (
         <div className="signin">
             <Formik
@@ -53,10 +83,11 @@ const SignIn = () => {
                 initialValues={{
                     email: '',
                     password: ''
-                }}
-            >
+                }}>
                 {({ handleSubmit, handleChange, values, touched, errors }) => (
                     <Form noValidate onSubmit={handleSubmit}>
+
+
                         <Row className="mb-3">
                             <Form.Group as={Row} md="12" controlId="validationFormik01">
                                 <Form.Label column sm="2">
@@ -81,6 +112,7 @@ const SignIn = () => {
                                     <Form.Control.Feedback type="invalid">
                                         {propErrors.email ? 'Email not found' : errors.email}
                                     </Form.Control.Feedback>
+                                    
                                 </Col>
                             </Form.Group>
                         </Row>
@@ -113,7 +145,9 @@ const SignIn = () => {
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
+                            
                         </Row>
+                        {isSign==false && 'Login unsuccessfull'}
                         <div className="float-center">
                             <Button type="submit">Sign In</Button>
                         </div>
@@ -126,12 +160,12 @@ const SignIn = () => {
 
 const SignUp = () => {
     const propsErrors = useAppSelector((state: RootState) => state.auth.errors);
+    const [isReg, setIsReg] = useState(false);
     const dispatch = useAppDispatch();
 
     const { Formik } = formik;
     const schema = yup.object().shape({
-        firstname: yup.string().required('Please Enter Your First Name'),
-        lastname: yup.string().required('Please Enter Your Last Name'),
+        name: yup.string().required('Please Enter Your Name'),
         email: yup.string().email('Enter proper email').required('Please Enter Your Email'),
         password: yup
             .string()
@@ -140,7 +174,18 @@ const SignUp = () => {
     });
 
     const signupUser = (values: any) => {
-        dispatch(registerUser(values));
+        const body = {
+            firstName: values?.name,
+            userEmail: values.email,
+            password: values.password
+        };
+        // Make a registration API call using apiService.dataService
+        apiService.dataService(body, 'REGISTER').then((data: any) => {
+            if (data?.status == 200) {
+                setIsReg(true);
+            }
+            dispatch(registerUser(data));
+        });
     };
 
     return (
@@ -151,60 +196,31 @@ const SignUp = () => {
                     signupUser(values);
                 }}
                 initialValues={{
-                    firstname: '',
-                    lastname: '',
+                    name: '',
                     email: '',
                     password: ''
-                }}
-            >
+                }}>
                 {({ handleSubmit, handleChange, values, touched, errors }) => (
                     <Form noValidate onSubmit={handleSubmit}>
                         <Row className="mb-3">
                             <Form.Group as={Row} md="12" controlId="validationFormik01">
                                 <Form.Label column sm="2">
-                                    First Name
+                                    Name
                                 </Form.Label>
                                 <Col sm="10">
                                     <Form.Control
                                         type="text"
-                                        placeholder="FirstName"
-                                        name="firstname"
-                                        value={values.firstname}
+                                        placeholder="Name"
+                                        name="name"
+                                        value={values.name}
                                         onChange={(e) => {
                                             handleChange(e);
                                             dispatch(clearErrors());
                                         }}
-                                        isInvalid={
-                                            touched.firstname && errors.firstname ? true : false
-                                        }
+                                        isInvalid={touched.name && errors.name ? true : false}
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.firstname}
-                                    </Form.Control.Feedback>
-                                </Col>
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group as={Row} md="12" controlId="validationFormik011">
-                                <Form.Label column sm="2">
-                                    Last Name
-                                </Form.Label>
-                                <Col sm="10">
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Last Name"
-                                        name="lastname"
-                                        value={values.lastname}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            dispatch(clearErrors());
-                                        }}
-                                        isInvalid={
-                                            touched.lastname && errors.lastname ? true : false
-                                        }
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.lastname}
+                                        {errors.name}
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
@@ -231,7 +247,9 @@ const SignUp = () => {
                                         }
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {propsErrors.email ? 'Email duplicate' : errors.email}
+                                        {propsErrors.email
+                                            ? 'User Email already exists'
+                                            : errors.email}
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
@@ -261,6 +279,7 @@ const SignUp = () => {
                                 </Col>
                             </Form.Group>
                         </Row>
+                        {isReg && 'Register Successfull'}
                         <div className="float-center">
                             <Button type="submit">Sign Up</Button>
                         </div>
@@ -317,8 +336,7 @@ const SignPage = () => {
                         activeKey={activeTab}
                         onSelect={(selectedKey: any) => {
                             dispatch(setSignTab(selectedKey));
-                        }}
-                    >
+                        }}>
                         <Nav.Item>
                             <Nav.Link eventKey="signin">Login</Nav.Link>
                         </Nav.Item>
