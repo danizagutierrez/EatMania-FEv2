@@ -8,7 +8,8 @@ import {
     deleteRestaurants,
     clearSuccess,
     updateRestaurant,
-    addRestaurant
+    addRestaurant,
+    fetchRestaurant
 } from '../../store/slices/restaurants';
 import RestaurantCard from './RestaurantCard';
 
@@ -25,6 +26,10 @@ const RestaurantTab = () => {
     useEffect(() => {
         setSelectedRestaurants([]);
     }, [restaurants]);
+    
+    useEffect(() => {
+        dispatch(fetchRestaurant())
+    }, [dispatch]);
 
     const handleDelete = () => {
         if (selectedRestaurants.length) {
