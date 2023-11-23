@@ -16,9 +16,9 @@ import { Rating } from 'react-simple-star-rating';
 import { toast } from 'react-toastify';
 
 interface Filters {
-    price: boolean;
-    reviews: boolean;
-    spice: boolean;
+    pricelow: boolean;
+    priceHigh: boolean;
+    Ratings: boolean;
 }
 
 const SearchFoodPage = () => {
@@ -44,30 +44,84 @@ const SearchFoodPage = () => {
     };
 
     const [filter, setFilter] = useState<Filters>({
-        price: false,
-        reviews: false,
-        spice: false
+        pricelow: false,
+        priceHigh: false,
+        Ratings: false
     });
 
-    const searchFood = () => {
-        const newFoodList = foods.filter((food: FoodItem) => {
-            let flag = false;
-            if (filter.price) {
-                flag = food.foodPrice.toLowerCase().includes(searchKeyWord.toLowerCase());
-            }
-            // if (!flag && filter.reviews) {
-            //     flag = food.reviews.toLowerCase().includes(searchKeyWord.toLowerCase());
-            // }
-            // if (!flag && filter.spice) {
-            //     flag = food.spice.toLowerCase().includes(searchKeyWord.toLowerCase());
-            // }
-            if (!flag) {
-                flag = food.foodName.toLowerCase().includes(searchKeyWord.toLowerCase());
-            }
-            return flag;
+
+    function orderFoodsByPriceAsc(food2: FoodItem[], ascending: boolean = true): FoodItem[] {
+        // Use the sort method with a compare function
+        food2.sort((a, b) => {
+            if (ascending) {
+            return a.foodPrice - b.foodPrice;
+          } else {
+            return b.foodPrice - a.foodPrice;
+          }
         });
-        setFoodList(newFoodList);
+        // Return the sorted array
+        return food2;
+      }
+
+    function orderFoodsByPriceDesc(food2: FoodItem[], descending: boolean = true): FoodItem[] {
+        // Use the sort method with a compare function
+        food2.sort((a, b) => {
+          if (descending) {
+            return b.foodPrice - a.foodPrice;
+          } else {
+            return a.foodPrice - b.foodPrice;
+          }
+        });
+      
+        // Return the sorted array
+        return food2;
+      }
+
+      function orderFoodsByRating(food2: FoodItem[], descending: boolean = true): FoodItem[] {
+        // Use the sort method with a compare function
+        food2.sort((a, b) => {
+          if (descending) {
+            return b.rating - a.rating;
+          } else {
+            return a.rating - b.rating;
+          }
+        });
+        // Return the sorted array
+        return food2;
+      }
+
+    const searchFood = () => {
+
+        if (searchKeyWord) {
+            const newFoodList = foods.filter((food: FoodItem) => {
+                // Perform case-insensitive search on food name
+                return food.foodName.toLowerCase().includes(searchKeyWord.toLowerCase());
+            });
+            setFoodList(newFoodList);
+        } else {
+            // If no search keyword, set foodList to the original list (foods)
+            setFoodList(foods);
+            console.log(foods)
+        }
     };
+    
+
+    const filterFood = () => {
+        setFoodList((prevFoodList) => {
+            let newFoodList = [...prevFoodList];
+    
+            if (filter.pricelow) {
+                newFoodList = orderFoodsByPriceAsc(newFoodList, true);
+            } else if (filter.priceHigh) {
+                newFoodList = orderFoodsByPriceDesc(newFoodList, true);
+            } else if (filter.Ratings) {
+                newFoodList = orderFoodsByRating(newFoodList, true);
+            }
+    
+            return newFoodList;
+        });
+};
+    
 
     const handleSearch = () => {
         if (searchKeyWord) {
@@ -95,18 +149,26 @@ const SearchFoodPage = () => {
             dispatch(setSearchKey(''));
         }
     }, [searchKey]);
+
     useEffect(() => {
         if (searchKeyWord) {
             searchFood();
-        } else {
+        }
+        else {
             setFoodList(foods);
         }
+    }, [filter]);
+
+    useEffect(() => {
+        if(filter){
+            filterFood() 
+        }  
     }, [filter]);
 
     const { Formik } = formik;
     const schema = yup.object().shape({
         rating: yup.number(),
-        review_content: yup.string().required('Please descripbe your review')
+        review_content: yup.string().required('Please describe your review')
     });
 
     const handleSubmitCustomer = (values: any) => {
@@ -158,31 +220,31 @@ const SearchFoodPage = () => {
             <Container>
                 <Row>
                     <Col md={12} lg={2} className="filter-class">
-                        <div>Filters</div>
+                    <div>Sort by</div>
                         <Form.Group>
                             <Form.Check
-                                label="Price"
-                                checked={filter.price}
+                                label="Price(Lower to Higher)"
+                                checked={filter.pricelow}
                                 onChange={(e) => {
-                                    setFilter({ ...filter, price: e.target.checked });
+                                    setFilter({ ...filter, pricelow: e.target.checked });
                                 }}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Check
-                                label="Reviews"
-                                checked={filter.reviews}
+                                label="Price(Higher to Lower)"
+                                checked={filter.priceHigh}
                                 onChange={(e) => {
-                                    setFilter({ ...filter, reviews: e.target.checked });
+                                    setFilter({ ...filter, priceHigh: e.target.checked });
                                 }}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Check
-                                label="Spice"
-                                checked={filter.spice}
+                                label="Rating(Higher to lower)"
+                                checked={filter.Ratings}
                                 onChange={(e) => {
-                                    setFilter({ ...filter, spice: e.target.checked });
+                                    setFilter({ ...filter, Ratings: e.target.checked });
                                 }}
                             />
                         </Form.Group>

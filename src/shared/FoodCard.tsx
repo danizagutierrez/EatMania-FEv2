@@ -14,13 +14,11 @@ export const FoodCard: FC<FoodCardProps> = ({ food, addReview }) => {
     return (
         <div className="box " style={{ position: 'relative' }}>
             <div className="img-box">
-                <img src={`/images/f${food.foodId > 10 ? 1 : food.foodId}.png`} alt="" />
+                <img src={food.image} alt="" />
             </div>
             <div className="detail-box">
                 <h5>{food.foodName}</h5>
-                {/* <h6>
-                    <span>{food.reviews}</span> Reviews
-                </h6> */}
+                <h5>{food.rating} &#9733;</h5> 
                 <p>{food.description}</p>
                 <p>${food.foodPrice}</p>
                 <p className="order">

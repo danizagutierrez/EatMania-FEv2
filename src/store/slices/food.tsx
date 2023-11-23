@@ -4,14 +4,14 @@ import axios from 'axios';
 
 export type FoodItem = {
     foodId: number;
-    adminID?: number;
     foodName: string;
-    foodPrice: string;
+    foodPrice: number;
+    rating: number;
     description: string;
     image?: string;
     reviews?: number;
     restaurant?: any;
-    spice?: string;
+    adminID?: number;
 };
 
 interface FoodState {
@@ -52,7 +52,7 @@ export const foodSlicer = createSlice({
         addFood: (state, action: PayloadAction<any>) => {
             state.foods.push({
                 ...action.payload,
-                image: '/images/f1.png'
+                // image: '/images/f1.png'
             });
         },
         updateFood: (state, action: PayloadAction<FoodItem>) => {
@@ -61,7 +61,7 @@ export const foodSlicer = createSlice({
                 state.foods[index] = {
                     ...action.payload,
                     foodId: state.foods[index].foodId,
-                    image: '/images/f1.png'
+                    // image: '/images/f1.png'
                 };
             }
         }

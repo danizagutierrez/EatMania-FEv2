@@ -24,7 +24,12 @@ export const FoodCard: FC<FoodCardProps> = ({ food, editFood, handleCheckboxChan
                     <img src={`/images/f${food.foodId > 10 ? 1 : food.foodId}.png`} alt="" />
                 </div>
                 <div className="detail-box">
-                    <h5>{food.foodName}</h5>
+                    <h5>{food.foodName} testing</h5>
+                    <h5>test</h5>
+
+                    <h6>
+                        <span>{food.rating}</span> Stars
+                    </h6>
                     {/* <h6>
                         <span>{food.reviews}</span> Reviews
                     </h6> */}
