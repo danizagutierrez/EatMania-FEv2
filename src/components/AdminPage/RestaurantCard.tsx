@@ -35,10 +35,10 @@ const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange, edi
                             <b>Name:</b> {r.name}
                         </span>
                         <span>
-                            <b>Cuisine Type:</b> {r.cuisine_type}
+                            <b>Cuisine Type:</b> {r.cuisineType}
                         </span>
                         <span>
-                            <b>Phone Number:</b> {r.phone_number}
+                            <b>Phone Number:</b> {r.phoneNumber}
                         </span>
                         <span>
                             <b>Description:</b> {r.description}

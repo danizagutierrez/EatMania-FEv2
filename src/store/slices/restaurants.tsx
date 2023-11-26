@@ -3,10 +3,10 @@ import axios from 'axios';
 
 export type IRestaurant = {
     restaurantId: number;
-    cuisine_type?: string;
+    cuisineType?: string;
     name: string;
     description?: string;
-    phone_number?: string;
+    phoneNumber?: string;
     rating?: string;
     website?: string;
     image?: string;
@@ -88,7 +88,3 @@ try {
         return console.error(error?.message);
     }
 }
-
-
-// export const foods = (state: RootState) => state.food.foods;
-// export const searchKey = (state: RootState) => state.food.searchKey;

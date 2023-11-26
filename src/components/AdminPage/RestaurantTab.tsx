@@ -9,9 +9,12 @@ import {
     clearSuccess,
     updateRestaurant,
     addRestaurant,
-    fetchRestaurant
+    fetchRestaurant,
+   // removeRestaurant
 } from '../../store/slices/restaurants';
 import RestaurantCard from './RestaurantCard';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const RestaurantTab = () => {
     const dispatch = useAppDispatch();
@@ -31,9 +34,24 @@ const RestaurantTab = () => {
         dispatch(fetchRestaurant())
     }, [dispatch]);
 
-    const handleDelete = () => {
+
+    const handleDelete = async () => {
         if (selectedRestaurants.length) {
+            for (let i = 0; i < selectedRestaurants.length; i++) {
+                try {
+                    await axios.delete(
+                        process.env.REACT_APP_API_URL +
+                            '/api/admin/restaurants/' +
+                            selectedRestaurants[i]
+                    );
+                } catch (error) {
+                    console.log('API Error: ', error);
+                    throw error;
+                }
+            }
+            toast.success('Deleted Successfully!');
             dispatch(deleteRestaurants(selectedRestaurants));
+            //setSelectedRestaurants([]);
         }
     };
 
@@ -62,9 +80,9 @@ const RestaurantTab = () => {
     const { Formik } = formik;
     const schema = yup.object().shape({
         name: yup.string().required("Please Enter Restaurant's Name"),
-        cuisine_type: yup.string().required('Please Enter Cuisine Type'),
+        cuisineType: yup.string().required('Please Enter Cuisine Type'),
         description: yup.string().required('Please Enter Description'),
-        phone_number: yup.string().required('Please Enter Phone Number'),
+        phoneNumber: yup.string().required('Please Enter Phone Number'),
         website: yup.string().required('Please Enter Website URL')
     });
 
@@ -130,20 +148,20 @@ const RestaurantTab = () => {
                                                   (r) => r.restaurantId === editing
                                               )[0]?.name
                                             : '',
-                                        cuisine_type: editing
+                                            cuisineType: editing
                                             ? restaurants.filter(
                                                   (r) => r.restaurantId === editing
-                                              )[0]?.cuisine_type || ''
+                                              )[0]?.cuisineType || ''
                                             : '',
                                         description: editing
                                             ? restaurants.filter(
                                                   (r) => r.restaurantId === editing
                                               )[0]?.description || ''
                                             : '',
-                                        phone_number: editing
+                                            phoneNumber: editing
                                             ? restaurants.filter(
                                                   (r) => r.restaurantId === editing
-                                              )[0]?.phone_number || ''
+                                              )[0]?.phoneNumber || ''
                                             : '',
                                         website: editing
                                             ? restaurants.filter(
@@ -195,18 +213,18 @@ const RestaurantTab = () => {
                                                         <Form.Control
                                                             type="text"
                                                             placeholder="Cuisine Type"
-                                                            name="cuisine_type"
-                                                            value={values.cuisine_type}
+                                                            name="cuisineType"
+                                                            value={values.cuisineType}
                                                             onChange={handleChange}
                                                             isInvalid={
-                                                                touched.cuisine_type &&
-                                                                errors.cuisine_type
+                                                                touched.cuisineType &&
+                                                                errors.cuisineType
                                                                     ? true
                                                                     : false
                                                             }
                                                         />
                                                         <Form.Control.Feedback type="invalid">
-                                                            {errors.cuisine_type}
+                                                            {errors.cuisineType}
                                                         </Form.Control.Feedback>
                                                     </Col>
                                                 </Form.Group>
@@ -224,18 +242,18 @@ const RestaurantTab = () => {
                                                         <Form.Control
                                                             type="text"
                                                             placeholder="Phone Number"
-                                                            name="phone_number"
-                                                            value={values.phone_number}
+                                                            name="phoneNumber"
+                                                            value={values.phoneNumber}
                                                             onChange={handleChange}
                                                             isInvalid={
-                                                                touched.phone_number &&
-                                                                errors.phone_number
+                                                                touched.phoneNumber &&
+                                                                errors.phoneNumber
                                                                     ? true
                                                                     : false
                                                             }
                                                         />
                                                         <Form.Control.Feedback type="invalid">
-                                                            {errors.phone_number}
+                                                            {errors.phoneNumber}
                                                         </Form.Control.Feedback>
                                                     </Col>
                                                 </Form.Group>
