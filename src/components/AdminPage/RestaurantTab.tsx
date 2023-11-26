@@ -70,7 +70,7 @@ const RestaurantTab = () => {
 
     const handleSubmitCustomer = (values: any) => {
         if (editing) {
-            dispatch(updateRestaurant({ ...values, restaurant_id: editing }));
+            dispatch(updateRestaurant({ ...values, restaurantId: editing }));
         } else {
             dispatch(addRestaurant(values));
         }
@@ -105,7 +105,7 @@ const RestaurantTab = () => {
                     <RestaurantCard
                         editRestaurant={editRestaurant}
                         r={r}
-                        key={r.restaurant_id}
+                        key={r.restaurantId}
                         handleCheckboxChange={handleCheckboxChange}
                     />
                 ))}
@@ -127,27 +127,27 @@ const RestaurantTab = () => {
                                     initialValues={{
                                         name: editing
                                             ? restaurants.filter(
-                                                  (r) => r.restaurant_id === editing
+                                                  (r) => r.restaurantId === editing
                                               )[0]?.name
                                             : '',
                                         cuisine_type: editing
                                             ? restaurants.filter(
-                                                  (r) => r.restaurant_id === editing
+                                                  (r) => r.restaurantId === editing
                                               )[0]?.cuisine_type || ''
                                             : '',
                                         description: editing
                                             ? restaurants.filter(
-                                                  (r) => r.restaurant_id === editing
+                                                  (r) => r.restaurantId === editing
                                               )[0]?.description || ''
                                             : '',
                                         phone_number: editing
                                             ? restaurants.filter(
-                                                  (r) => r.restaurant_id === editing
+                                                  (r) => r.restaurantId === editing
                                               )[0]?.phone_number || ''
                                             : '',
                                         website: editing
                                             ? restaurants.filter(
-                                                  (r) => r.restaurant_id === editing
+                                                  (r) => r.restaurantId === editing
                                               )[0]?.website || ''
                                             : ''
                                     }}

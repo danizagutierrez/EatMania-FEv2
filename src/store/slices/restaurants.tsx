@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export type IRestaurant = {
-    restaurant_id: number;
+    restaurantId: number;
     cuisine_type?: string;
     name: string;
     description?: string;
@@ -20,43 +20,7 @@ interface RestaurantState {
 //The list of restaurants should go here
 
 const initialState: RestaurantState = {
-    restaurants: [
-        // {
-        //     restaurant_id: 1,
-        //     name: 'Restaurant 1',
-        //     cuisine_type: 'ABC Street DEF City GHI State',
-        //     rating: '4',
-        //     image: '/images/restaurant.png'
-        // },
-        // {
-        //     restaurant_id: 2,
-        //     name: 'Restaurant 2',
-        //     cuisine_type: '123 Street DEF City GHI State',
-        //     rating: '5',
-        //     image: '/images/restaurant.png'
-        // },
-        // {
-        //     restaurant_id: 3,
-        //     name: 'Restaurant 3',
-        //     cuisine_type: 'QWE Street DEF City GHI State',
-        //     rating: '4.2',
-        //     image: '/images/restaurant.png'
-        // },
-        // {
-        //     restaurant_id: 4,
-        //     name: 'Restaurant 4',
-        //     cuisine_type: 'ASD Street DEF City GHI State',
-        //     rating: '4.3',
-        //     image: '/images/restaurant.png'
-        // },
-        // {
-        //     restaurant_id: 5,
-        //     name: 'Restaurant 5',
-        //     cuisine_type: 'ABC Street DEF City GHI State',
-        //     rating: '4.8',
-        //     image: '/images/restaurant.png'
-        // }
-    ],
+    restaurants: [],
     success: false
 };
 
@@ -67,7 +31,7 @@ export const restaurantSlicer = createSlice({
         deleteRestaurants: (state, action: PayloadAction<number[]>) => {
             for (let i = 0; i < action.payload.length; i++) {
                 const index = state.restaurants.findIndex(
-                    (r) => r.restaurant_id === action.payload[i]
+                    (r) => r.restaurantId === action.payload[i]
                 );
                 if (index !== -1) {
                     state.restaurants.splice(index, 1);
@@ -77,7 +41,7 @@ export const restaurantSlicer = createSlice({
         addRestaurant: (state, action: PayloadAction<IRestaurant>) => {
             state.restaurants.push({
                 ...action.payload,
-                restaurant_id: state.restaurants.length + 1,
+                restaurantId: state.restaurants.length + 1,
                 image: '/images/restaurant.png',
                 rating: '0'
             });
@@ -85,12 +49,12 @@ export const restaurantSlicer = createSlice({
         },
         updateRestaurant: (state, action: PayloadAction<IRestaurant>) => {
             const index = state.restaurants.findIndex(
-                (r) => r.restaurant_id === action.payload.restaurant_id
+                (r) => r.restaurantId === action.payload.restaurantId
             );
             if (index !== -1) {
                 state.restaurants[index] = {
                     ...action.payload,
-                    restaurant_id: state.restaurants[index].restaurant_id,
+                    restaurantId: state.restaurants[index].restaurantId,
                     image: '/images/restaurant.png',
                     rating: state.restaurants[index].rating
                 };
