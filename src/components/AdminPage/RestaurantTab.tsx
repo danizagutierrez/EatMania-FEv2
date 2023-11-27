@@ -9,8 +9,7 @@ import {
     clearSuccess,
     updateRestaurant,
     addRestaurant,
-    fetchRestaurant,
-   // removeRestaurant
+    fetchRestaurant
 } from '../../store/slices/restaurants';
 import RestaurantCard from './RestaurantCard';
 import axios from 'axios';
@@ -21,6 +20,7 @@ const RestaurantTab = () => {
 
     const restaurants = useAppSelector((state: RootState) => state.restaurant.restaurants);
     const success = useAppSelector((state: RootState) => state.restaurant.success);
+
 
     const [selectedRestaurants, setSelectedRestaurants] = useState<number[]>([]);
     const [show, setShow] = useState(false);
@@ -87,12 +87,67 @@ const RestaurantTab = () => {
     });
 
     const handleSubmitCustomer = (values: any) => {
+        const apiUrl = process.env.REACT_APP_API_URL + '/api/admin/restaurants/';  // Default path for updating
+    
         if (editing) {
-            dispatch(updateRestaurant({ ...values, restaurantId: editing }));
+            // Use the editing endpoint for updating
+            axios
+                .put(
+                    `${apiUrl}${editing}`,
+                    {
+                        name: values.name,
+                        cuisineType: values.cuisineType,
+                        description: values.description,
+                        phoneNumber: values.phoneNumber, 
+                        website: values.website
+                        // Add other properties as needed
+                    }
+                )
+                .then((res) => {
+                    if (res.data) {
+                        dispatch(updateRestaurant(res.data));
+                        toast.success('Updated Successfully!');
+                        setShow(false);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         } else {
-            dispatch(addRestaurant(values));
+            // Use a different endpoint for adding
+            axios
+                .post(
+                    process.env.REACT_APP_API_URL + '/api/admin/restaurant',  // Adjust the path for adding
+                    {
+                        name: values.name,
+                        cuisineType: values.cuisineType,
+                        description: values.description,
+                        phoneNumber: values.phoneNumber,
+                        website: values.website
+                        // Add other properties as needed
+                    }
+                )
+                .then((res) => {
+                    dispatch(addRestaurant(res.data));
+                    setShow(false);
+                    toast.success('Added Successfully!');
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         }
     };
+    
+    
+   
+
+    // const handleSubmitCustomer = (values: any) => {
+    //     if (editing) {
+    //         dispatch(updateRestaurant({ ...values, restaurantId: editing }));
+    //     } else {
+    //         dispatch(addRestaurant(values));
+    //     }
+    // };
 
     useEffect(() => {
         if (success) {

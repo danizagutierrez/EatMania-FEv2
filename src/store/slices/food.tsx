@@ -51,8 +51,7 @@ export const foodSlicer = createSlice({
         },
         addFood: (state, action: PayloadAction<any>) => {
             state.foods.push({
-                ...action.payload,
-                // image: '/images/f1.png'
+                ...action.payload
             });
         },
         updateFood: (state, action: PayloadAction<FoodItem>) => {
@@ -60,8 +59,7 @@ export const foodSlicer = createSlice({
             if (index !== -1) {
                 state.foods[index] = {
                     ...action.payload,
-                    foodId: state.foods[index].foodId,
-                    // image: '/images/f1.png'
+                    foodId: state.foods[index].foodId
                 };
             }
         }
