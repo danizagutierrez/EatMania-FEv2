@@ -19,9 +19,11 @@ import {
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { RootState } from '../../store/store';
 import { Alert } from 'react-bootstrap';
+import apiService from '../../services/apiService';
 
 const SignIn = () => {
     const navigate = useNavigate();
+    const [isSign, setIsSign] = useState(true);
     const propErrors = useAppSelector((state: RootState) => state.auth.errors);
     const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
     const dispatch = useAppDispatch();
@@ -36,8 +38,30 @@ const SignIn = () => {
     });
 
     const signinUser = (values: any) => {
-        dispatch(loginUser(values));
+        const body = {
+            email: values.email,
+            password: values.password
+        };
+
+        // Make a registration API call using apiService.dataService
+        apiService.dataService(body, 'LOGIN').then((data: any) => {
+            if (data?.status == 200) {
+
+                dispatch(loginUser(data));
+                navigate('/user');
+            } else {
+                // Handle unsuccessful login
+                setIsSign(false);
+                console.error('Login failed:', data?.status);
+
+                // Example: Show an error message to the user
+
+                dispatch(clearErrors());
+            }
+        });
     };
+
+
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/');
@@ -114,6 +138,7 @@ const SignIn = () => {
                                 </Col>
                             </Form.Group>
                         </Row>
+                        {isSign==false && 'Login unsuccessfull'}
                         <div className="float-center">
                             <Button type="submit">Sign In</Button>
                         </div>
@@ -126,6 +151,7 @@ const SignIn = () => {
 
 const SignUp = () => {
     const propsErrors = useAppSelector((state: RootState) => state.auth.errors);
+    const [isReg, setIsReg] = useState(false);
     const dispatch = useAppDispatch();
 
     const { Formik } = formik;
@@ -140,7 +166,19 @@ const SignUp = () => {
     });
 
     const signupUser = (values: any) => {
-        dispatch(registerUser(values));
+        const body = {
+            firstName: values?.firstname,
+            lastName: values?.lastname,
+            userEmail: values.email,
+            password: values.password
+        };
+        // Make a registration API call using apiService.dataService
+        apiService.dataService(body, 'REGISTER').then((data: any) => {
+            if (data?.status == 200) {
+                setIsReg(true);
+            }
+            dispatch(registerUser(data));
+        });
     };
 
     return (
@@ -155,8 +193,7 @@ const SignUp = () => {
                     lastname: '',
                     email: '',
                     password: ''
-                }}
-            >
+                }}>
                 {({ handleSubmit, handleChange, values, touched, errors }) => (
                     <Form noValidate onSubmit={handleSubmit}>
                         <Row className="mb-3">
@@ -209,6 +246,7 @@ const SignUp = () => {
                                 </Col>
                             </Form.Group>
                         </Row>
+
                         <Row className="mb-3">
                             <Form.Group as={Row} md="12" controlId="validationFormik02">
                                 <Form.Label column sm="2">
@@ -231,7 +269,9 @@ const SignUp = () => {
                                         }
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        {propsErrors.email ? 'Email duplicate' : errors.email}
+                                    {propsErrors.email
+                                            ? 'User Email already exists'
+                                            : errors.email}
                                     </Form.Control.Feedback>
                                 </Col>
                             </Form.Group>
@@ -261,6 +301,7 @@ const SignUp = () => {
                                 </Col>
                             </Form.Group>
                         </Row>
+                        {isReg && 'Register Successfull'}
                         <div className="float-center">
                             <Button type="submit">Sign Up</Button>
                         </div>
