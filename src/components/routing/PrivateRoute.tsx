@@ -7,7 +7,7 @@ interface RouteProps {
     children: ReactNode;
 }
 
-const PrivateRoute: FC<RouteProps> = ({ children }) => {
+const PrivateRoute: FC<RouteProps> = ({ children }) : any => {
     const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
     if (!isAuthenticated) {
         return <Navigate to="/sign" />;
