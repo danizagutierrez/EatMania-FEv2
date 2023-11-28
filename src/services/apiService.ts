@@ -4,7 +4,7 @@ import axios from 'axios';
   const apiService = {
     dataService: async (data: any, operation: string) => {
 
-      const BASEURL = "http://localhost:8080/api";
+      const BASEURL = "http://eatmania-env.eba-ivjnb3d2.us-east-2.elasticbeanstalk.com/api";
       let response : any;
 
       try {
