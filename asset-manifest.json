@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/EatMania-FEv2/static/css/main.e1a2fdf6.css",
-    "main.js": "/EatMania-FEv2/static/js/main.4678a5c9.js",
+    "main.js": "/EatMania-FEv2/static/js/main.ebfddae3.js",
     "static/js/787.d4aba7ab.chunk.js": "/EatMania-FEv2/static/js/787.d4aba7ab.chunk.js",
     "static/media/hero-bg.jpg": "/EatMania-FEv2/static/media/hero-bg.ac596bd69d11364d39b2.jpg",
     "static/media/OpenSans-ExtraBoldItalic.ttf": "/EatMania-FEv2/static/media/OpenSans-ExtraBoldItalic.dcebf48a8e1af4750939.ttf",
@@ -24,11 +24,11 @@
     "static/media/NoData.svg": "/EatMania-FEv2/static/media/NoData.767d28821451d4fbbedb0a3a1fa50ae5.svg",
     "index.html": "/EatMania-FEv2/index.html",
     "main.e1a2fdf6.css.map": "/EatMania-FEv2/static/css/main.e1a2fdf6.css.map",
-    "main.4678a5c9.js.map": "/EatMania-FEv2/static/js/main.4678a5c9.js.map",
+    "main.ebfddae3.js.map": "/EatMania-FEv2/static/js/main.ebfddae3.js.map",
     "787.d4aba7ab.chunk.js.map": "/EatMania-FEv2/static/js/787.d4aba7ab.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e1a2fdf6.css",
-    "static/js/main.4678a5c9.js"
+    "static/js/main.ebfddae3.js"
   ]
 }
