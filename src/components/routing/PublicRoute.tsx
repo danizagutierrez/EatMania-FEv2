@@ -7,7 +7,7 @@ interface RouteProps {
     children: ReactNode;
 }
 
-const PublicRoute: FC<RouteProps> = ({ children }) : any => {
+const PublicRoute: FC<RouteProps> = ({ children }) => {
     const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated);
     const user = useAppSelector((state: RootState) => state.auth.user);
     if (isAuthenticated) {

@@ -2,8 +2,6 @@ import { FC } from 'react';
 import type { FoodItem } from '../../store/slices/food';
 import { Button } from 'react-bootstrap';
 
-//This food card is for the admin page to check on the restaurant's menu
-
 interface FoodCardProps {
     food: FoodItem;
     handleCheckboxChange: (checked: boolean, id: string) => void;
@@ -27,10 +25,6 @@ export const FoodCard: FC<FoodCardProps> = ({ food, editFood, handleCheckboxChan
                 </div>
                 <div className="detail-box">
                     <h5>{food.foodName}</h5>
-
-                    <h6>
-                        <span>{food.rating}</span> Stars
-                    </h6>
                     {/* <h6>
                         <span>{food.reviews}</span> Reviews
                     </h6> */}

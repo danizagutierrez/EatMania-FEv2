@@ -40,7 +40,6 @@ const Sidebar: FC<SidebarProps> = ({ expand, setSidebarActiveTab, activeTab }) =
                             <Nav.Link eventKey="profile">Profile</Nav.Link>
                             <Nav.Link eventKey="restaurant">Restaurant</Nav.Link>
                             <Nav.Link eventKey="customers">Customers</Nav.Link>
-                            <Nav.Link>Setting</Nav.Link>
                         </Nav>
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>

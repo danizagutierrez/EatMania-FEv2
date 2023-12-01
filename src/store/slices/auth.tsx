@@ -18,12 +18,6 @@ export type IUser = {
     user_address?: string;
     subscription?: string;
     next_renewal?: string;
-    id?: number;
-    name?: string;
-    email?: string;
-    password?: string;
-    location?: string;
-
 };
 
 interface IError {
@@ -82,50 +76,46 @@ export const authSlicer = createSlice({
         setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
             state.isAuthenticated = action.payload;
         },
-
-        loginUser: (state, action: any) => {
-            
-            if (state.userList.filter((user) => user.user_email === action.payload.data.userEmail).length) {
+        loginUser: (state, action: PayloadAction<{ email: string; password: string }>) => {
+            if (state.userList.filter((user) => user.user_email === action.payload.email).length) {
                 if (
-                    state.userList.filter((user) => user.user_email === action.payload.data.userEmail)[0]
-                        .user_password === action.payload.data.password
+                    state.userList.filter((user) => user.user_email === action.payload.email)[0]
+                        .user_password === action.payload.password
                 ) {
-
-                    //update user info
                     state.user = state.userList.filter(
-                        (user) => user.user_email === action.payload.data.userEmail
+                        (user) => user.user_email === action.payload.email
                     )[0];
                     state.isAuthenticated = true;
                 } else {
                     state.errors.password = true;
                 }
             } else {
-                if (!action.payload?.data.userEmail) state.errors.email = true;
-                state.isAuthenticated = true;
-                state.user.user_firstname = action?.payload?.data.firstName;
-                state.user.user_lastname = action?.payload?.data.lastName;
-
-                state.user.user_email  = action?.payload?.data.userEmail; 
-                state.user.is_admin = false;
-                state.user.is_active = true;
-                state.user.password = action?.payload?.data.password;
+                state.errors.email = true;
             }
         },
         logout: (state) => {
             state.isAuthenticated = false;
             state.user = {};
         },
-        registerUser: (state, action: any) => {
-            console.log(action);
-            if (action.payload?.status === 200) {
+        registerUser: (state, action: PayloadAction<any>) => {
+            if (state.userList.filter((user) => user.user_email === action.payload.email).length) {
+                state.errors.email = true;
+            } else {
+                state.userList.push({
+                    user_firstname: action.payload.firstname,
+                    user_lastname: action.payload.lastname,
+                    user_email: action.payload.email,
+                    user_password: action.payload.password,
+                    is_active: true,
+                    is_admin: false,
+                    user_id: state.userList.length + 1,
+                    created_at: new Date().toISOString()
+                });
+                state.authSuccess = true;
+                state.tab = 'signin';
                 state.errors = {
                     password: false,
                     email: false
-                };
-            } else {
-                state.errors = {
-                    password: true,
-                    email: true
                 };
             }
         },

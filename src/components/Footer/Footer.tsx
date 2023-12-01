@@ -11,7 +11,7 @@ const Footer = () => {
                             <div className="contact_link_box">
                                 <a href="">
                                     <i className="fa fa-map-marker" aria-hidden="true"></i>
-                                    <span>Location</span>
+                                    <span>Vancouver BC,Canada</span>
                                 </a>
                                 <a href="">
                                     <i className="fa fa-phone" aria-hidden="true"></i>
@@ -19,7 +19,7 @@ const Footer = () => {
                                 </a>
                                 <a href="">
                                     <i className="fa fa-envelope" aria-hidden="true"></i>
-                                    <span>demo@gmail.com</span>
+                                    <span>EatMania@gmail.com</span>
                                 </a>
                             </div>
                         </div>
@@ -30,23 +30,23 @@ const Footer = () => {
                                 Eat Mania
                             </a>
                             <p>
-                                Necessary, making this the first true generator on the Internet. It
-                                uses a dictionary of over 200 Latin words, combined with
+                            Welcome to Eatmania, where every bite counts! Our platform is your go-to destination for culinary exploration. 
+                            Whether you're seeking the perfect restaurant, comparing kitchen gadgets, or exploring diverse cuisines, Eatmania is here to guide your taste journey. Discover, compare, and savor the best of the culinary world with us
                             </p>
                             <div className="footer_social">
-                                <a href="">
+                                <a href="https://www.facebook.com"  target='_blank'>
                                     <FontAwesomeIcon icon={['fab', 'facebook']} />
                                 </a>
-                                <a href="">
+                                <a href="https://twitter.com" target='_blank'>
                                     <FontAwesomeIcon icon={['fab', 'twitter']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.linkedin.com"  target='_blank'>
                                     <FontAwesomeIcon icon={['fab', 'linkedin-in']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.instagram.com" target='_blank'>
                                     <FontAwesomeIcon icon={['fab', 'instagram']} />
                                 </a>
-                                <a href="">
+                                <a href="https://www.pinterest.com" target='_blank'>
                                     <FontAwesomeIcon icon={['fab', 'pinterest']} />
                                 </a>
                             </div>
@@ -58,18 +58,7 @@ const Footer = () => {
                         <p>10.00 Am -10.00 Pm</p>
                     </div>
                 </div>
-                <div className="footer-info">
-                    <p>
-                        &copy; <span id="displayYear"></span> All Rights Reserved By&nbsp;{' '}
-                        <a href="https://html.design/">Free Html Templates</a>
-                        <br />
-                        <br />
-                        &copy; <span id="displayYear"></span> Distributed By&nbsp;{' '}
-                        <a href="https://themewagon.com/" target="_blank">
-                            ThemeWagon
-                        </a>
-                    </p>
-                </div>
+                
             </div>
         </footer>
     );

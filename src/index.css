@@ -658,7 +658,7 @@ section.sign .tab .tab-content .row {
 .offer_section .box .detail-box button {
     max-width: 150px;
     display: inline-block;
-    padding: 10px 30px;
+    padding: 10px 10px;
     background-color: #ffbe33;
     color: #ffffff;
     border-radius: 45px;
@@ -1348,8 +1348,8 @@ body {
     }
 
     .offer_section .box .order button {
-        max-width: 90%;
-        width: 90%;
+        max-width: 95%;
+        width: 95%;
     }
 
     .offer_section .box {
@@ -1461,8 +1461,8 @@ body {
     }
 
     .offer_section .box .order button {
-        width: 90%;
-        max-width: 90%;
+        max-width: 95%;
+        width: 95%;
     }
 
     .offer_section .box .order {
@@ -1551,4 +1551,12 @@ body {
 
 .view_more:hover {
     background-color: #e69c00;
+}
+.myheader{
+    color: black;
+    margin: 7px;
+    padding: 110px;
+    text-align: center;
+    padding-left: 27%;
+    padding-right: 25%;
 }

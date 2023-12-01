@@ -16,7 +16,7 @@ const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange, edi
         <div className="restaurant-card">
             <input
                 type="checkbox"
-                value={r.restaurantId}
+                value={r.restaurant_id}
                 onChange={(e) => handleCheckboxChange(e.target.checked, e.target.value)}
             />
             <div className="borderWithText" data-text={r.name}>
@@ -35,10 +35,10 @@ const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange, edi
                             <b>Name:</b> {r.name}
                         </span>
                         <span>
-                            <b>Cuisine Type:</b> {r.cuisineType}
+                            <b>Cuisine Type:</b> {r.cuisine_type}
                         </span>
                         <span>
-                            <b>Phone Number:</b> {r.phoneNumber}
+                            <b>Phone Number:</b> {r.phone_number}
                         </span>
                         <span>
                             <b>Description:</b> {r.description}
@@ -49,14 +49,14 @@ const RestaurantCard: FC<IRestaurantCardProps> = ({ r, handleCheckboxChange, edi
                         <span className="d-flex justify-content-between">
                             <Button
                                 onClick={() => {
-                                    editRestaurant(r.restaurantId);
+                                    editRestaurant(r.restaurant_id);
                                 }}
                             >
                                 Edit
                             </Button>
                             <Button
                                 onClick={() => {
-                                    navigate('/restaurant/' + r.restaurantId);
+                                    navigate('/restaurant/' + r.restaurant_id);
                                 }}
                             >
                                 Manage Menu

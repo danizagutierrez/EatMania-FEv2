@@ -14,19 +14,21 @@ export const FoodCard: FC<FoodCardProps> = ({ food, addReview }) => {
     return (
         <div className="box " style={{ position: 'relative' }}>
             <div className="img-box">
-                <img src={food.image} alt="" />
+                <img src={`/images/f${food.foodId > 10 ? 1 : food.foodId}.png`} alt="" />
             </div>
             <div className="detail-box">
                 <h5>{food.foodName}</h5>
-                <h5>{food.rating} &#9733;</h5> 
+                {/* <h6>
+                    <span>{food.reviews}</span> Reviews
+                </h6> */}
                 <p>{food.description}</p>
                 <p>${food.foodPrice}</p>
                 <p className="order">
-                    <button>
-                        Order1
+                    <button onClick={() => { window.location.href='https://www.ubereats.com' }}>
+                        Order1 
                         <AddOrder />
                     </button>
-                    <button>
+                    <button onClick={() => { window.location.href='https://www.doordash.com' }}>
                         Order2
                         <AddOrder />
                     </button>

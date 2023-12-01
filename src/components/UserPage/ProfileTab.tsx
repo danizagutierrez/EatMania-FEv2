@@ -1,8 +1,8 @@
-import { Col, Container, Row, Button, Form, Image, Alert } from 'react-bootstrap';
+import { Col, Container, Row, Button, Form, Alert } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RootState } from '../../store/store';
 // import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import * as formik from 'formik';
 import * as yup from 'yup';
 import { updateUserProfile, clearSuccess, clearErrors } from '../../store/slices/auth';
@@ -12,14 +12,33 @@ const ProfileTab = () => {
     const authSuccess = useAppSelector((state: RootState) => state.auth.authSuccess);
     const propErrors = useAppSelector((state: RootState) => state.auth.errors);
 
+    const inputRef = useRef(null);
     const dispatch = useAppDispatch();
-
+    const [userImg, setUserImg] = useState<any>('/images/client1.jpg');
     const [show, setShow] = useState<boolean>(false);
     const [isEditable, setIsEditable] = useState<boolean>(false);
     const [alert, setAlert] = useState({
         type: '',
         msg: ''
     });
+    const handleClick = () => {
+        if (inputRef.current) {
+            (inputRef.current as HTMLInputElement).click();
+        }
+    }
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.length) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                // To get the data URL of the image file
+                const dataURL = event.target!.result as string;
+                setUserImg(dataURL);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
     const { Formik } = formik;
     const schema = yup.object().shape({
         lastname: yup.string().required('Please Enter Your Last Name'),
@@ -143,7 +162,7 @@ const ProfileTab = () => {
                                                     }}
                                                     isInvalid={
                                                         (touched.email && errors.email) ||
-                                                        propErrors.email
+                                                            propErrors.email
                                                             ? true
                                                             : false
                                                     }
@@ -200,8 +219,10 @@ const ProfileTab = () => {
                             Edit Profile
                         </Button>
                     </Col>
-                    <Col md={12} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Image src="/images/client1.jpg" thumbnail />
+                    <Col md={12} lg={6}>
+                        <Button onClick={handleClick} variant='primary' >Change</Button>
+                        <img className='img-thumbnail' src={userImg} alt="userimg" />
+                        <input ref={inputRef} type='file' accept='image/*' id="imgUpload" style={{ display: 'none' }} onChange={handleFileChange} />
                     </Col>
                 </Row>
             </Container>

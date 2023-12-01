@@ -4,7 +4,6 @@ import { Col, Container, Row, Button, Image } from 'react-bootstrap';
 
 const SubscriptionTab = () => {
     // const user = useAppSelector((state: RootState) => state.auth.user);
-
     return (
         <>
             <h1 className="mb-5">Subscription</h1>
@@ -20,7 +19,7 @@ const SubscriptionTab = () => {
                             className="mb-3"
                             variant="outline-success"
                             onClick={() => {
-                                console.log('Clicked!');
+                                window.location.href='https://www.paypal.com';
                             }}
                         >
                             Click to pay Subscription
